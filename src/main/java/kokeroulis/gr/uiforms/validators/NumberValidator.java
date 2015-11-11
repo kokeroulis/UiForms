@@ -18,9 +18,18 @@ import android.text.Spanned;
 public abstract class NumberValidator<T extends Comparable<T>> implements InputFilter {
     private final T mMaxVal;
     private final T mMinVal;
+    private InvalidInputListener mListener;
 
-    private static int BIGGER = 1;
-    private static int LOWER = -1;
+    private static final int BIGGER = 1;
+    private static final int ZERO = 0;
+    private static final int LOWER = -1;
+
+    public static final int INVALID_INPUT = 2;
+    public static final int OUTOF_RANGE_INPUT = 3;
+
+    public interface InvalidInputListener {
+        void onInvalidInput(String source, int reasonId);
+    }
 
     public NumberValidator(T minVal, T maxVal) {
         mMaxVal = maxVal;
@@ -32,13 +41,29 @@ public abstract class NumberValidator<T extends Comparable<T>> implements InputF
         String number = dest.toString() + source;
         final T val = charToVal(number);
 
-        if (val.compareTo(charToVal("0")) != LOWER
+        if (val.compareTo(charToVal("-1")) == ZERO) {
+            if (mListener != null) {
+                mListener.onInvalidInput(number, INVALID_INPUT);
+            }
+            return "";
+        } else if (val.compareTo(charToVal("0")) != LOWER
             && val.compareTo(mMaxVal) != BIGGER
             && val.compareTo(mMinVal) != LOWER) {
             return source;
         } else {
+            if (mListener != null) {
+                mListener.onInvalidInput(number, OUTOF_RANGE_INPUT);
+            }
             return "";
         }
+    }
+
+    public void setInvalidInputListener(InvalidInputListener listener) {
+        mListener = listener;
+    }
+
+    public void clearListener() {
+        mListener = null;
     }
 
     protected abstract T charToVal(String source);

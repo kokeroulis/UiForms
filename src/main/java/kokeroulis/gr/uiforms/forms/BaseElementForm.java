@@ -63,7 +63,17 @@ public abstract class BaseElementForm<Validator extends NumberValidator> extends
         setFilters();
     }
 
+    public void setInvalidInputListener(NumberValidator.InvalidInputListener listener) {
+        mValidator.setInvalidInputListener(listener);
+    }
+
     protected void setFilters() {
         mEditValue.setFilters(new InputFilter[]{mValidator});
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        mValidator.clearListener();
     }
 }
