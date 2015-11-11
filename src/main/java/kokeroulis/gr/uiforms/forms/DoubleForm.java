@@ -13,13 +13,11 @@ package kokeroulis.gr.uiforms.forms;
     */
 
 import android.content.Context;
-import android.text.InputFilter;
 import android.util.AttributeSet;
-import android.widget.EditText;
 
 import kokeroulis.gr.uiforms.validators.DoubleValidator;
 
-public class DoubleForm extends BaseElementForm {
+public class DoubleForm extends BaseElementForm<DoubleValidator> {
     public DoubleForm(Context context) {
         super(context);
     }
@@ -30,11 +28,5 @@ public class DoubleForm extends BaseElementForm {
 
     public DoubleForm(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-    }
-
-    @Override
-    protected void setFilters(EditText editView) {
-        DoubleValidator validator = new DoubleValidator(0.0, 50.0);
-        editView.setFilters(new InputFilter[]{validator});
     }
 }

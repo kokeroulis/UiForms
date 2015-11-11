@@ -13,13 +13,11 @@ package kokeroulis.gr.uiforms.forms;
     */
 
 import android.content.Context;
-import android.text.InputFilter;
 import android.util.AttributeSet;
-import android.widget.EditText;
 
 import kokeroulis.gr.uiforms.validators.IntegerValidator;
 
-public class IntegerForm extends BaseElementForm {
+public class IntegerForm extends BaseElementForm<IntegerValidator> {
 
     public IntegerForm(Context context) {
         super(context);
@@ -31,11 +29,5 @@ public class IntegerForm extends BaseElementForm {
 
     public IntegerForm(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-    }
-
-    @Override
-    protected void setFilters(EditText editView) {
-        IntegerValidator validator = new IntegerValidator(0, 50);
-        editView.setFilters(new InputFilter[]{validator});
     }
 }

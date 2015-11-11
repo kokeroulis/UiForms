@@ -13,6 +13,7 @@ package kokeroulis.gr.uiforms.forms;
     */
 
 import android.content.Context;
+import android.text.InputFilter;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -20,8 +21,13 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import kokeroulis.gr.uiforms.R;
+import kokeroulis.gr.uiforms.validators.NumberValidator;
 
-public abstract class BaseElementForm extends LinearLayout {
+public abstract class BaseElementForm<Validator extends NumberValidator> extends LinearLayout {
+
+    private EditText mEditValue;
+    protected Validator mValidator;
+
     public BaseElementForm(Context context) {
         super(context);
         initUI(context);
@@ -49,9 +55,15 @@ public abstract class BaseElementForm extends LinearLayout {
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        final EditText e = (EditText) findViewById(R.id.edit);
-        setFilters(e);
+        mEditValue = (EditText) findViewById(R.id.edit);
     }
 
-    protected abstract void setFilters(EditText editView);
+    public void generateValidator(Validator validator) {
+        mValidator = validator;
+        setFilters();
+    }
+
+    protected void setFilters() {
+        mEditValue.setFilters(new InputFilter[]{mValidator});
+    }
 }
