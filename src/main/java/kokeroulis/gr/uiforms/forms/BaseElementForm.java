@@ -20,8 +20,15 @@ import android.view.LayoutInflater;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
+import com.jakewharton.rxbinding.widget.RxTextView;
+
+import java.util.concurrent.TimeUnit;
+
 import kokeroulis.gr.uiforms.R;
 import kokeroulis.gr.uiforms.validators.NumberValidator;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
 
 public abstract class BaseElementForm<Validator extends NumberValidator> extends LinearLayout {
 
@@ -69,6 +76,20 @@ public abstract class BaseElementForm<Validator extends NumberValidator> extends
 
     protected void setFilters() {
         mEditValue.setFilters(new InputFilter[]{mValidator});
+    }
+
+    public Observable<String> valueChanged() {
+        return RxTextView
+            .textChanges(mEditValue)
+            .skip(1) // First event is a blank string "".
+            .debounce(400, TimeUnit.MILLISECONDS) //
+            .observeOn(AndroidSchedulers.mainThread())
+            .map(new Func1<CharSequence, String>() {
+                @Override
+                public String call(CharSequence text) {
+                    return text.toString();
+                }
+            });
     }
 
     @Override
