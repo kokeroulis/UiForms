@@ -1,36 +1,36 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
 buildscript {
     repositories {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.4.+'
+        classpath 'com.android.tools.build:gradle:1.3.0'
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
     }
 }
 
-apply plugin: 'com.android.library'
+ext {
+    buildToolsVersion = "23.0.1"
+    compileSdkVersion = 23
+    minSdk = 16
+    targetSdk = 23
+    supportLibraryVersion = "23.0.1"
+    // rx
 
-android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
+    rxJava = 'io.reactivex:rxjava:1.0+'
+    rxAndroid = 'io.reactivex:rxandroid:1.0+'
+    rxBindings =  'com.jakewharton.rxbinding:rxbinding:0.2.0'
+}
 
-    defaultConfig {
-        minSdkVersion rootProject.ext.minSdk
-        targetSdkVersion rootProject.ext.targetSdk
-        versionCode 1
-        versionName "1.0"
-    }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
+allprojects {
+    repositories {
+        jcenter()
     }
 }
 
-dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:' + rootProject.ext.supportLibraryVersion
-    compile rootProject.ext.rxJava
-    compile rootProject.ext.rxAndroid
-    compile rootProject.ext.rxBindings
+task clean(type: Delete) {
+    delete rootProject.buildDir
 }
